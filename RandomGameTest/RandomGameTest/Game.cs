@@ -12,6 +12,10 @@ namespace RandomGameTest
         public Panel MainScreen;
         public Graphics MainScreenGraphics;
         public Area CurrentArea;
+        public ListView lv_inv;
+        public ListView lv_floorinv;
+        public ProgressBar pb_health;
+        public ProgressBar pb_mana;
         public Player player;
         public static Game NewGame(Form1 form)
         {
@@ -28,12 +32,29 @@ namespace RandomGameTest
             CurrentArea = new Area("Starting Area", 50, 50);
             CurrentArea.FillRect(TileDef.DIRT, 30, 0, 4, 50);
             player = new Player("Test Player", 20, 20, CurrentArea);
+            player.game = this;
+            lv_floorinv = MainForm.lv_drops;
+            lv_inv = MainForm.lv_inventory;
+            Item apple = new Item("Apple", Image.FromFile("sprites/items/apple.png"), 69);
+            new ItemDrop(apple,15,15,CurrentArea);
+            ImageList dropimglist = new ImageList();
+            ImageList invimglist = new ImageList();
+            lv_floorinv.LargeImageList = dropimglist;
+            lv_inv.LargeImageList = invimglist;
+            invimglist.ImageSize = new Size(32, 32);
+            dropimglist.ImageSize = new Size(32, 32);
+            pb_health = MainForm.pb_health;
+            pb_mana = MainForm.pb_mana;
             MainForm.CurrentGame = this;
             Refresh();
         }
         public void Refresh()
         {
             MainScreen.Refresh();
+            RedrawFloorItems();
+            RedrawInv();
+            pb_mana.Value = (int)Math.Ceiling((double)(player.MP / player.MaxMP) * 100);
+            pb_health.Value = (int)Math.Ceiling((double)(player.HP / player.MaxHP) * 100);
         }
         public void DrawScreen(Graphics panelg)
         {
@@ -54,7 +75,14 @@ namespace RandomGameTest
                     }
                 }
             }
-            foreach(Mob mob in CurrentArea.mobs)
+            foreach (ItemDrop item in CurrentArea.items)
+            {
+                if (item != null)
+                {
+                    g.DrawImage(item.item.image, new Rectangle((item.x * 32) - centerx + offx, item.y * 32 - centery + offy, 32, 32));
+                }
+            }
+            foreach (Mob mob in CurrentArea.mobs)
             {
                 if (mob != null)
                 {
@@ -65,10 +93,92 @@ namespace RandomGameTest
             g.Dispose();
             b.Dispose();
         }
+        public void RedrawInv()
+        {
+            lv_inv.LargeImageList.Images.Clear();
+            for (var i = 0; i < lv_inv.Items.Count; i++)
+            {
+                ItemData itemdata = (ItemData)lv_inv.Items[i];
+                itemdata.ImageIndex = i;
+                lv_inv.LargeImageList.Images.Add(itemdata.image);
+            }
+            lv_inv.Refresh();
+        }
+        public void RedrawFloorItems()
+        {
+            lv_floorinv.Items.Clear();
+            foreach(ItemDrop drop in CurrentArea.items)
+            {
+                if(drop.x == player.x && drop.y == player.y)
+                {
+                    lv_floorinv.Items.Add(new ItemDropData(drop));
+                }
+            }
+            lv_floorinv.LargeImageList.Images.Clear();
+            for (var i = 0; i < lv_floorinv.Items.Count; i++)
+            {
+                ItemDropData itemdata = (ItemDropData)lv_floorinv.Items[i];
+                itemdata.ImageIndex = i;
+                lv_floorinv.LargeImageList.Images.Add(itemdata.image);
+            }
+            lv_floorinv.Refresh();
+        }
         public void HandleKeyPress(Keys e)
         {
             switch (e)
             {
+                case Keys.NumPad9:
+                    player.y -= 1;
+                    player.x += 1;
+                    Refresh();
+                    break;
+                case Keys.NumPad8:
+                    player.y -= 1;
+                    Refresh();
+                    break;
+                case Keys.NumPad7:
+                    player.y -= 1;
+                    player.x -= 1;
+                    Refresh();
+                    break;
+                case Keys.NumPad6:
+                    player.x += 1;
+                    Refresh();
+                    break;
+                case Keys.NumPad4:
+                    player.x -= 1;
+                    Refresh();
+                    break;
+                case Keys.NumPad3:
+                    player.y += 1;
+                    player.x += 1;
+                    Refresh();
+                    break;
+                case Keys.NumPad2:
+                    player.y += 1;
+                    Refresh();
+                    break;
+                case Keys.NumPad1:
+                    player.y += 1;
+                    player.x -= 1;
+                    Refresh();
+                    break;
+                case Keys.Up:
+                    player.y -= 1;
+                    Refresh();
+                    break;
+                case Keys.Left:
+                    player.x -= 1;
+                    Refresh();
+                    break;
+                case Keys.Down:
+                    player.y += 1;
+                    Refresh();
+                    break;
+                case Keys.Right:
+                    player.x += 1;
+                    Refresh();
+                    break;
                 case Keys.W:
                     player.y -= 1;
                     Refresh();

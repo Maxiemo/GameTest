@@ -13,6 +13,7 @@ namespace RandomGameTest
         public int height;
         public Tile[,] tiles;
         public List<Mob> mobs = new List<Mob>();
+        public List<ItemDrop> items = new List<ItemDrop>();
         public Area(string name, int width, int height)
         {
             this.name = name;
