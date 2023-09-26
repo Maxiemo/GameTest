@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.Devices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,9 @@ namespace RandomGameTest
         public ListView lv_floorinv;
         public ProgressBar pb_health;
         public ProgressBar pb_mana;
+        Random random;
         public Player player;
+        public Dictionary<string,Area> Areas = new Dictionary<string, Area>();
         public static Game NewGame(Form1 form)
         {
             Game game = new Game();
@@ -25,13 +28,27 @@ namespace RandomGameTest
             return game;
 
         }
+        public bool RandBool()
+        {
+            return RandInt(2) == 0;
+        }
+        public int RandInt(int max)
+        {
+            return RandInt(0, max);
+        }
+        public int RandInt(int min, int max)
+        {
+            return (int)random.NextInt64(min, max);
+        }
+
         public void OnGameStart()
         {
+            random = new Random();
             MainScreen = MainForm.p_mainscreen;
             MainScreenGraphics = MainScreen.CreateGraphics();
-            CurrentArea = new Area("Starting Area", 50, 50);
-            CurrentArea.FillRect(TileDef.DIRT, 30, 0, 4, 50);
+            CurrentArea = Generator_VILLAGE.Instance.Generate("Starting Area", 50, 50,TileDef.GRASS,TileDef.DIRT,new DirectionList(N: true),this);
             player = new Player("Test Player", 20, 20, CurrentArea);
+
             player.game = this;
             lv_floorinv = MainForm.lv_drops;
             lv_inv = MainForm.lv_inventory;
