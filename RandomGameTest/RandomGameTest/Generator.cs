@@ -75,10 +75,10 @@ namespace RandomGameTest
     public class Generator_VILLAGE : Generator
     {
         public static Generator_VILLAGE Instance = new Generator_VILLAGE();
-        public Area Generate(string name, int w, int h, TileDef floormat, TileDef pathmat, DirectionList DL, Game game)
+        public Area Generate(string name, int w, int h, TileDef floormat, TileDef pathmat, DirectionList DL, int houses,Game game)
         {
             Area area = Generator_PATH.Instance.Generate(name,w,h,floormat,pathmat,DL,game);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < houses; i++)
             {
                 GenerateHouse(TileDef.WOOD, TileDef.WOOD_WALL, DL, area, game);
             }
@@ -88,7 +88,7 @@ namespace RandomGameTest
 
         public Area Generate(string name, int w, int h, Game game)
         {
-            return Generate(name, w, h,  TileDef.WOOD,TileDef.WOOD_WALL, new DirectionList(N:true),game);
+            return Generate(name, w, h,  TileDef.WOOD,TileDef.WOOD_WALL, new DirectionList(N:true),1,game);
         }
         public void GeneratePath (Direction dir, Direction stepdir, int x, int y, Area area, Game game)
         {
@@ -96,7 +96,7 @@ namespace RandomGameTest
             int dy = 0;
             int sx = 0;
             int sy = 0;
-            TileDef pathmat = TileDef.PATH_PLACEHOLDER;
+            TileDef pathmat = TileDef.DIRT;
             switch (dir)
             {
                 case Direction.NORTH:
@@ -127,15 +127,15 @@ namespace RandomGameTest
                     sx = 1;
                     break;
             }
-            x += dx;
-            y += dy;
-            while(x >= 0 && y >= 0 && x < area.width && y < area.height && area.GetTileDef(x,y) != pathmat)
+            
+            while(x+dx >= 0 && y+dy >= 0 && x+dx < area.width && y+dy < area.height && area.GetTileDef(x+dx,y+dy) != pathmat)
             {
-                area.SetTile(x, y, pathmat);
+                x += dx;
+                y += dy;
+
                 if (area.IsTileEmpty(x,y))
                 {
-                    x += dx;
-                    y += dy;
+                    area.SetTile(x, y, TileDef.PATH_PLACEHOLDER);
                 }
                 else
                 {
@@ -143,6 +143,7 @@ namespace RandomGameTest
                     y -= dy;
                     x += sx;
                     y += sy;
+                    area.SetTile(x, y, TileDef.PATH_PLACEHOLDER);
                 }
             }
         }
@@ -153,12 +154,12 @@ namespace RandomGameTest
             int x = -1;
             int y = -1;
             Direction road = DL.GetRandom(game);
+            bool side;
+            int attempts = 0;
+            bool foundspace = false;
             switch (road)
             {
                 case Direction.NORTH:
-                    bool side;
-                    int attempts = 0;
-                    bool foundspace = false;
                     while (!foundspace && attempts < 25)
                     {
                         side = game.RandBool();
@@ -170,13 +171,14 @@ namespace RandomGameTest
                             {
                                 x = game.RandInt(7, (area.width / 2) - 7);
                                 y = game.RandInt(10, (area.height / 2) - 10);
-                                if (area.IsRectEmpty(x- (w / 2), y-(h / 2), w,h))
+                                if (area.IsRectEmpty(x- (w / 2)-1, y-(h / 2)-1, w+2,h+2))
                                 {
                                     foundspace = true;
                                     GeneratePath(Direction.EAST, Direction.NORTH, x, y, area, game);
 
                                     area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
                                     area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.SetTile(x + ((w-1) / 2), y, floor);
                                 }
                                 else
                                 {
@@ -187,12 +189,188 @@ namespace RandomGameTest
                             {
                                 x = game.RandInt((area.width / 2)+7, area.width - 7);
                                 y = game.RandInt(10, (area.height / 2) - 10);
-                                if (area.IsRectEmpty(x - (w / 2), y - (h / 2), w, h))
+                                if (area.IsRectEmpty(x - (w / 2)-1, y - (h / 2)-1, w + 2, h+2))
                                 {
                                     foundspace = true;
                                     GeneratePath(Direction.WEST, Direction.NORTH, x, y, area, game);
                                     area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
                                     area.FillRect(floor, x - (w / 2)+1, y - (h / 2)+1, w-2, h-2);
+                                    area.SetTile(x - (w / 2), y, floor);
+                                }
+                                else
+                                {
+                                    attempts++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            attempts = 100;
+                        }
+                    }
+                    if (foundspace)
+                    {
+                        Debug.WriteLine("Built house: (" + x + "," + y + "," + w + "," + h + ")");
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Failed to build a house.");
+                    }
+                    return foundspace;
+                case Direction.EAST:
+                    while (!foundspace && attempts < 25)
+                    {
+                        side = game.RandBool();
+                        w = game.RandInt(5) + 8;
+                        h = game.RandInt(4) + 5;
+                        if (area.width / 2 >= 20 && area.height / 2 >= 20)
+                        {
+                            if (side)
+                            {
+                                x = game.RandInt((area.width / 2) + 10, area.width - 10);
+                                y = game.RandInt(7, (area.height / 2) - 7);
+                                if (area.IsRectEmpty(x - (w / 2) - 1, y - (h / 2) - 1, w + 2, h + 2))
+                                {
+                                    foundspace = true;
+                                    GeneratePath(Direction.SOUTH, Direction.EAST, x, y, area, game);
+
+                                    area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
+                                    area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.SetTile(x, y + ((h - 1) / 2), floor);
+                                }
+                                else
+                                {
+                                    attempts++;
+                                }
+                            }
+                            else
+                            {
+                                x = game.RandInt((area.width / 2) + 10, area.width - 10);
+                                y = game.RandInt((area.height / 2) + 7, area.height - 7);
+                                if (area.IsRectEmpty(x - (w / 2) - 1, y - (h / 2) - 1, w + 2, h + 2))
+                                {
+                                    foundspace = true;
+                                    GeneratePath(Direction.NORTH, Direction.EAST, x, y, area, game);
+                                    area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
+                                    area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.SetTile(x, y - (h / 2), floor);
+                                }
+                                else
+                                {
+                                    attempts++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            attempts = 100;
+                        }
+                    }
+                    if (foundspace)
+                    {
+                        Debug.WriteLine("Built house: (" + x + "," + y + "," + w + "," + h + ")");
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Failed to build a house.");
+                    }
+                    return foundspace;
+                case Direction.WEST:
+                    while (!foundspace && attempts < 25)
+                    {
+                        side = game.RandBool();
+                        w = game.RandInt(5) + 8;
+                        h = game.RandInt(4) + 5;
+                        if (area.width / 2 >= 20 && area.height / 2 >= 20)
+                        {
+                            if (side)
+                            {
+                                x = game.RandInt(10, (area.width / 2) - 10);
+                                y = game.RandInt(7, (area.height / 2) - 7);
+                                if (area.IsRectEmpty(x - (w / 2) - 1, y - (h / 2) - 1, w + 2, h + 2))
+                                {
+                                    foundspace = true;
+                                    GeneratePath(Direction.SOUTH, Direction.WEST, x, y, area, game);
+
+                                    area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
+                                    area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.SetTile(x, y + ((h - 1) / 2), floor);
+                                }
+                                else
+                                {
+                                    attempts++;
+                                }
+                            }
+                            else
+                            {
+                                x = game.RandInt(10, (area.width / 2) -10);
+                                y = game.RandInt((area.height / 2) + 7, area.height-7);
+                                if (area.IsRectEmpty(x - (w / 2) - 1, y - (h / 2) - 1, w + 2, h + 2))
+                                {
+                                    foundspace = true;
+                                    GeneratePath(Direction.NORTH, Direction.WEST, x, y, area, game);
+                                    area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
+                                    area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.SetTile(x, y - (h / 2), floor);
+                                }
+                                else
+                                {
+                                    attempts++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            attempts = 100;
+                        }
+                    }
+                    if (foundspace)
+                    {
+                        Debug.WriteLine("Built house: (" + x + "," + y + "," + w + "," + h + ")");
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Failed to build a house.");
+                    }
+                    return foundspace;
+                case Direction.SOUTH:
+
+                    while (!foundspace && attempts < 25)
+                    {
+                        side = game.RandBool();
+                        w = game.RandInt(4) + 5;
+                        h = game.RandInt(5) + 8;
+                        if (area.width / 2 >= 14 && area.height / 2 >= 20)
+                        {
+                            if (side)
+                            {
+                                x = game.RandInt(7, (area.width / 2) - 7);
+                                y = game.RandInt((area.height / 2) + 10, area.height-10);
+                                if (area.IsRectEmpty(x - (w / 2) - 1, y - (h / 2) - 1, w + 2, h + 2))
+                                {
+                                    foundspace = true;
+                                    GeneratePath(Direction.EAST, Direction.SOUTH, x, y, area, game);
+
+                                    area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
+                                    area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.SetTile(x + ((w - 1) / 2), y, floor);
+                                }
+                                else
+                                {
+                                    attempts++;
+                                }
+                            }
+                            else
+                            {
+                                x = game.RandInt((area.width / 2) + 7, area.width - 7);
+                                y = game.RandInt((area.height / 2) + 10, area.height - 10);
+                                if (area.IsRectEmpty(x - (w / 2) - 1, y - (h / 2) - 1, w + 2, h + 2))
+                                {
+                                    foundspace = true;
+                                    GeneratePath(Direction.WEST, Direction.SOUTH, x, y, area, game);
+                                    area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
+                                    area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.SetTile(x - (w / 2), y, floor);
                                 }
                                 else
                                 {

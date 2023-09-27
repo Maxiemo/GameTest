@@ -18,6 +18,19 @@ namespace RandomGameTest
             this.area = area;
             this.area.mobs.Add(this);
         }
+        public bool TryMove(int newx, int newy)
+        {
+            if (area.IsTileEmpty(newx, newy))
+            {
+                x = newx;
+                y = newy;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public void ChangeArea(int newx, int newy, Area newarea)
         {
             x = newx;

@@ -46,7 +46,7 @@ namespace RandomGameTest
             random = new Random();
             MainScreen = MainForm.p_mainscreen;
             MainScreenGraphics = MainScreen.CreateGraphics();
-            CurrentArea = Generator_VILLAGE.Instance.Generate("Starting Area", 50, 50,TileDef.GRASS,TileDef.DIRT,new DirectionList(N: true),this);
+            CurrentArea = Generator_VILLAGE.Instance.Generate("Starting Area", 50, 50,TileDef.GRASS,TileDef.DIRT,new DirectionList(N:true, E:true, S:true, W: true),8,this);
             player = new Player("Test Player", 20, 20, CurrentArea);
 
             player.game = this;
@@ -145,71 +145,67 @@ namespace RandomGameTest
             switch (e)
             {
                 case Keys.NumPad9:
-                    player.y -= 1;
-                    player.x += 1;
+                    player.TryMove(player.x + 1, player.y - 1);
                     Refresh();
                     break;
                 case Keys.NumPad8:
-                    player.y -= 1;
+                    player.TryMove(player.x, player.y - 1);
                     Refresh();
                     break;
                 case Keys.NumPad7:
-                    player.y -= 1;
-                    player.x -= 1;
+                    player.TryMove(player.x - 1, player.y - 1);
                     Refresh();
                     break;
                 case Keys.NumPad6:
-                    player.x += 1;
+                    player.TryMove(player.x + 1, player.y);
                     Refresh();
                     break;
                 case Keys.NumPad4:
-                    player.x -= 1;
+                    player.TryMove(player.x - 1, player.y);
                     Refresh();
                     break;
                 case Keys.NumPad3:
-                    player.y += 1;
-                    player.x += 1;
+                    player.TryMove(player.x + 1, player.y + 1);
                     Refresh();
                     break;
                 case Keys.NumPad2:
-                    player.y += 1;
+                    player.TryMove(player.x, player.y + 1);
                     Refresh();
                     break;
                 case Keys.NumPad1:
-                    player.y += 1;
-                    player.x -= 1;
+                    player.TryMove(player.x - 1, player.y + 1);
                     Refresh();
                     break;
                 case Keys.Up:
-                    player.y -= 1;
+                    player.TryMove(player.x, player.y - 1);
                     Refresh();
                     break;
                 case Keys.Left:
-                    player.x -= 1;
+                    player.TryMove(player.x - 1, player.y);
                     Refresh();
                     break;
                 case Keys.Down:
-                    player.y += 1;
+                    player.TryMove(player.x, player.y + 1);
                     Refresh();
                     break;
                 case Keys.Right:
-                    player.x += 1;
+                    player.TryMove(player.x + 1, player.y);
                     Refresh();
                     break;
                 case Keys.W:
-                    player.y -= 1;
+                    player.TryMove(player.x, player.y - 1);
                     Refresh();
                     break;
                 case Keys.A:
-                    player.x -= 1;
+                    player.TryMove(player.x - 1, player.y);
                     Refresh();
                     break;
                 case Keys.S:
-                    player.y += 1;
+                    player.TryMove(player.x, player.y + 1);
                     Refresh();
                     break;
                 case Keys.D:
-                    player.x += 1;
+                    player.TryMove(player.x + 1, player.y);
                     Refresh();
                     break;
                 default:
