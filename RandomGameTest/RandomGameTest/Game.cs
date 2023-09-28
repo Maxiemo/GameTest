@@ -51,9 +51,9 @@ namespace RandomGameTest
             random = new Random();
             MainScreen = MainForm.p_mainscreen;
             MainScreenGraphics = MainScreen.CreateGraphics();
-            CurrentArea = Generator_VILLAGE.Instance.Generate("Starting Area", 50, 80,TileDef.GRASS,TileDef.DIRT,new DirectionList(N:true),8,this);
-            Area area2 = Generator_PATH.Instance.Generate("Second Area", 20, 50, TileDef.GRASS, TileDef.DIRT, new DirectionList(S: true,N:true), this);
-            CurrentArea.AddConnection(Direction.NORTH, area2);
+            CurrentArea = Generator_VILLAGE.Instance.Generate("Starting Area", 50, 60,TileDef.GRASS,TileDef.DIRT,new DirectionList(E:true,S:true,N:true),8,this);
+            Area area2 = Generator_PATH.Instance.Generate("Second Area", 30, 50, TileDef.GRASS, TileDef.DIRT, new DirectionList(S: true,N:true,W:true), this);
+            CurrentArea.AddConnection(Direction.EAST, area2);
             player = new Player("Test Player", 20, 20, CurrentArea);
 
             player.game = this;

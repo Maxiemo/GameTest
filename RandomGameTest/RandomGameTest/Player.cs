@@ -77,6 +77,24 @@ namespace RandomGameTest
                         return true;
                     }
                 }
+                if (newx >= area.width && area.Connections.ContainsKey(Direction.EAST))
+                {
+                    Area newarea = area.Connections[Direction.EAST];
+                    if (newarea.IsTileEmpty(0, y - (area.height / 2) + (newarea.height / 2)))
+                    {
+                        ChangeArea(0, y - (area.height / 2) + (newarea.height / 2),newarea);
+                        return true;
+                    }
+                }
+                if (newx < 0 && area.Connections.ContainsKey(Direction.WEST))
+                {
+                    Area newarea = area.Connections[Direction.WEST];
+                    if (newarea.IsTileEmpty(newarea.width-1,y - (area.height / 2) + (newarea.height / 2)))
+                    {
+                        ChangeArea(newarea.width - 1, y - (area.height / 2) + (newarea.height / 2),newarea);
+                        return true;
+                    }
+                }
                 return false;
             }
         }

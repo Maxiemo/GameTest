@@ -41,15 +41,18 @@
             labHealth = new Label();
             label3 = new Label();
             button1 = new Button();
+            textBox1 = new TextBox();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
+            menuStrip1.ImageScalingSize = new Size(20, 20);
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(900, 24);
+            menuStrip1.Padding = new Padding(7, 3, 0, 3);
+            menuStrip1.Size = new Size(1029, 30);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -57,24 +60,25 @@
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tsmi_newgame });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Size = new Size(46, 24);
             fileToolStripMenuItem.Text = "File";
             // 
             // tsmi_newgame
             // 
             tsmi_newgame.Name = "tsmi_newgame";
-            tsmi_newgame.Size = new Size(132, 22);
+            tsmi_newgame.Size = new Size(165, 26);
             tsmi_newgame.Text = "New Game";
             tsmi_newgame.Click += tsmi_newgame_Click;
             // 
             // lv_inventory
             // 
             lv_inventory.AllowDrop = true;
-            lv_inventory.Location = new Point(514, 134);
+            lv_inventory.Location = new Point(587, 179);
+            lv_inventory.Margin = new Padding(3, 4, 3, 4);
             lv_inventory.MultiSelect = false;
             lv_inventory.Name = "lv_inventory";
             lv_inventory.ShowItemToolTips = true;
-            lv_inventory.Size = new Size(312, 373);
+            lv_inventory.Size = new Size(356, 496);
             lv_inventory.TabIndex = 2;
             lv_inventory.TileSize = new Size(64, 64);
             lv_inventory.UseCompatibleStateImageBehavior = false;
@@ -93,9 +97,10 @@
             // 
             p_mainscreen.AllowDrop = true;
             p_mainscreen.BackColor = Color.Black;
-            p_mainscreen.Location = new Point(21, 27);
+            p_mainscreen.Location = new Point(24, 36);
+            p_mainscreen.Margin = new Padding(3, 4, 3, 4);
             p_mainscreen.Name = "p_mainscreen";
-            p_mainscreen.Size = new Size(471, 480);
+            p_mainscreen.Size = new Size(538, 640);
             p_mainscreen.TabIndex = 3;
             p_mainscreen.DragDrop += p_mainscreen_DragDrop;
             p_mainscreen.DragEnter += p_mainscreen_DragEnter;
@@ -104,10 +109,11 @@
             // lv_drops
             // 
             lv_drops.AllowDrop = true;
-            lv_drops.Location = new Point(514, 531);
+            lv_drops.Location = new Point(587, 708);
+            lv_drops.Margin = new Padding(3, 4, 3, 4);
             lv_drops.MultiSelect = false;
             lv_drops.Name = "lv_drops";
-            lv_drops.Size = new Size(312, 197);
+            lv_drops.Size = new Size(356, 261);
             lv_drops.TabIndex = 4;
             lv_drops.UseCompatibleStateImageBehavior = false;
             lv_drops.ItemDrag += lv_drops_ItemDrag;
@@ -117,18 +123,18 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(653, 116);
+            label1.Location = new Point(746, 155);
             label1.Name = "label1";
-            label1.Size = new Size(57, 15);
+            label1.Size = new Size(70, 20);
             label1.TabIndex = 5;
             label1.Text = "Inventory";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(633, 513);
+            label2.Location = new Point(723, 684);
             label2.Name = "label2";
-            label2.Size = new Size(96, 15);
+            label2.Size = new Size(119, 20);
             label2.TabIndex = 6;
             label2.Text = "Items on Ground";
             label2.Click += label2_Click;
@@ -136,9 +142,10 @@
             // pb_health
             // 
             pb_health.ForeColor = Color.Red;
-            pb_health.Location = new Point(556, 50);
+            pb_health.Location = new Point(635, 67);
+            pb_health.Margin = new Padding(3, 4, 3, 4);
             pb_health.Name = "pb_health";
-            pb_health.Size = new Size(332, 23);
+            pb_health.Size = new Size(379, 31);
             pb_health.Style = ProgressBarStyle.Continuous;
             pb_health.TabIndex = 7;
             pb_health.Value = 50;
@@ -146,9 +153,10 @@
             // pb_mana
             // 
             pb_mana.ForeColor = Color.DodgerBlue;
-            pb_mana.Location = new Point(556, 88);
+            pb_mana.Location = new Point(635, 117);
+            pb_mana.Margin = new Padding(3, 4, 3, 4);
             pb_mana.Name = "pb_mana";
-            pb_mana.Size = new Size(332, 23);
+            pb_mana.Size = new Size(379, 31);
             pb_mana.Style = ProgressBarStyle.Continuous;
             pb_mana.TabIndex = 8;
             pb_mana.Value = 50;
@@ -157,35 +165,50 @@
             // labHealth
             // 
             labHealth.AutoSize = true;
-            labHealth.Location = new Point(514, 52);
+            labHealth.Location = new Point(587, 69);
             labHealth.Name = "labHealth";
-            labHealth.Size = new Size(42, 15);
+            labHealth.Size = new Size(53, 20);
             labHealth.TabIndex = 9;
             labHealth.Text = "Health";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(519, 91);
+            label3.Location = new Point(593, 121);
             label3.Name = "label3";
-            label3.Size = new Size(37, 15);
+            label3.Size = new Size(46, 20);
             label3.TabIndex = 10;
             label3.Text = "Mana";
             // 
             // button1
             // 
-            button1.Location = new Point(832, 134);
+            button1.Location = new Point(951, 179);
+            button1.Margin = new Padding(3, 4, 3, 4);
             button1.Name = "button1";
-            button1.Size = new Size(56, 61);
+            button1.Size = new Size(64, 81);
             button1.TabIndex = 11;
             button1.Text = "button1";
             button1.UseVisualStyleBackColor = true;
             // 
+            // textBox1
+            // 
+            textBox1.BackColor = Color.White;
+            textBox1.BorderStyle = BorderStyle.FixedSingle;
+            textBox1.Location = new Point(24, 708);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.ReadOnly = true;
+            textBox1.Size = new Size(538, 261);
+            textBox1.TabIndex = 12;
+            // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(900, 740);
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            ClientSize = new Size(1029, 987);
+            Controls.Add(textBox1);
             Controls.Add(button1);
             Controls.Add(label3);
             Controls.Add(labHealth);
@@ -200,7 +223,11 @@
             DoubleBuffered = true;
             KeyPreview = true;
             MainMenuStrip = menuStrip1;
+            Margin = new Padding(3, 4, 3, 4);
+            MaximizeBox = false;
             Name = "Form1";
+            ShowIcon = false;
+            SizeGripStyle = SizeGripStyle.Hide;
             Text = "Game Thing";
             Load += Form1_Load;
             KeyDown += Form1_KeyDown;
@@ -225,5 +252,6 @@
         private Label labHealth;
         private Label label3;
         private Button button1;
+        private TextBox textBox1;
     }
 }
