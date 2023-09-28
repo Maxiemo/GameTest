@@ -6,30 +6,23 @@ using System.Threading.Tasks;
 
 namespace RandomGameTest
 {
-    public enum Direction
-    {
-        NORTH,
-        NORTHEAST,
-        EAST,
-        SOUTHEAST,
-        SOUTH,
-        SOUTHWEST,
-        WEST,
-        NORTHWEST
-    }    
+
     public class Area
     {
+
         public string name;
         public int width;
         public int height;
         public Game game;
         public Tile[,] tiles;
+        public List<RoofArea> roofAreas = new List<RoofArea>();
         public List<Mob> mobs = new List<Mob>();
         public List<ItemDrop> items = new List<ItemDrop>();
         public Dictionary<Direction,Area> Connections = new System.Collections.Generic.Dictionary<Direction,Area>();
         public Area AddConnection(Direction direction, Area area)
         {
             Connections[direction] = area;
+            area.Connections[direction.Opposite()] = this;
             return this;
         }
         public Area(string name, int width, int height, Game game)
@@ -91,7 +84,15 @@ namespace RandomGameTest
         }
         public bool IsTileEmpty(int x, int y)
         {
-            return !tiles[x, y].def.solid;
+            if(x >= 0 && y >= 0 && x < tiles.GetLength(0) && y < tiles.GetLength(1))
+            {
+                return !tiles[x, y].def.solid;
+            }
+            else
+            {
+                return false;
+            }
+            
         }
         public bool IsRectEmpty(int x, int y, int w, int h)
         {
@@ -124,7 +125,60 @@ namespace RandomGameTest
         }
     }
 
+    public struct RoofArea
+    {
+        public Image image;
+        public int x, y, w, h;
+        public RoofArea (int x, int y, int w, int h, Image image)
+        {
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+            this.image = image;
+        }
+    }
 
+    public enum Direction
+    {
+        NORTH,
+        NORTHEAST,
+        EAST,
+        SOUTHEAST,
+        SOUTH,
+        SOUTHWEST,
+        WEST,
+        NORTHWEST
 
+    }
+
+    public static class DirExtension
+    {
+        public static Direction Opposite(this Direction dir)
+        {
+            switch (dir)
+            {
+                case (Direction.NORTH):
+                    return Direction.SOUTH;
+                case (Direction.NORTHEAST):
+                    return Direction.SOUTHWEST;
+                case (Direction.EAST):
+                    return Direction.WEST;
+                case (Direction.SOUTHEAST):
+                    return Direction.NORTHWEST;
+                case (Direction.SOUTH):
+                    return Direction.NORTH;
+                case (Direction.SOUTHWEST):
+                    return Direction.NORTHEAST;
+                case (Direction.WEST):
+                    return Direction.EAST;
+                case (Direction.NORTHWEST):
+                    return Direction.SOUTHEAST;
+
+                default:
+                    return Direction.NORTH;
+            }
+        }
+    }
 
 }

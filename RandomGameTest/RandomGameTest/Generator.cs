@@ -78,9 +78,19 @@ namespace RandomGameTest
         public Area Generate(string name, int w, int h, TileDef floormat, TileDef pathmat, DirectionList DL, int houses,Game game)
         {
             Area area = Generator_PATH.Instance.Generate(name,w,h,floormat,pathmat,DL,game);
-            for (int i = 0; i < houses; i++)
+            int attempts = 0;
+            int made = 0;
+            while(attempts < 100 && made < 8)
             {
-                GenerateHouse(TileDef.WOOD, TileDef.WOOD_WALL, DL, area, game);
+                bool a = GenerateHouse(TileDef.WOOD, TileDef.WOOD_WALL, DL, area, game);
+                if (a)
+                {
+                    made++;
+                }
+                else
+                {
+                    attempts++;
+                }
             }
             area.ReplaceInRect(TileDef.PATH_PLACEHOLDER, TileDef.DIRT, 0, 0, area.width, area.height);
             return area;
@@ -178,6 +188,7 @@ namespace RandomGameTest
 
                                     area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
                                     area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.roofAreas.Add(new RoofArea(x - (w / 2), y - (h / 2), w, h, Game.RoofImage));
                                     area.SetTile(x + ((w-1) / 2), y, floor);
                                 }
                                 else
@@ -195,6 +206,7 @@ namespace RandomGameTest
                                     GeneratePath(Direction.WEST, Direction.NORTH, x, y, area, game);
                                     area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
                                     area.FillRect(floor, x - (w / 2)+1, y - (h / 2)+1, w-2, h-2);
+                                    area.roofAreas.Add(new RoofArea(x - (w / 2), y - (h / 2), w, h, Game.RoofImage));
                                     area.SetTile(x - (w / 2), y, floor);
                                 }
                                 else
@@ -236,6 +248,7 @@ namespace RandomGameTest
 
                                     area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
                                     area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.roofAreas.Add(new RoofArea(x - (w / 2), y - (h / 2), w, h, Game.RoofImage));
                                     area.SetTile(x, y + ((h - 1) / 2), floor);
                                 }
                                 else
@@ -253,6 +266,7 @@ namespace RandomGameTest
                                     GeneratePath(Direction.NORTH, Direction.EAST, x, y, area, game);
                                     area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
                                     area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.roofAreas.Add(new RoofArea(x - (w / 2), y - (h / 2), w, h, Game.RoofImage));
                                     area.SetTile(x, y - (h / 2), floor);
                                 }
                                 else
@@ -294,6 +308,7 @@ namespace RandomGameTest
 
                                     area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
                                     area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.roofAreas.Add(new RoofArea(x - (w / 2), y - (h / 2), w, h, Game.RoofImage));
                                     area.SetTile(x, y + ((h - 1) / 2), floor);
                                 }
                                 else
@@ -311,6 +326,7 @@ namespace RandomGameTest
                                     GeneratePath(Direction.NORTH, Direction.WEST, x, y, area, game);
                                     area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
                                     area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.roofAreas.Add(new RoofArea(x - (w / 2), y - (h / 2), w, h, Game.RoofImage));
                                     area.SetTile(x, y - (h / 2), floor);
                                 }
                                 else
@@ -353,6 +369,7 @@ namespace RandomGameTest
 
                                     area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
                                     area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.roofAreas.Add(new RoofArea(x - (w / 2), y - (h / 2), w, h, Game.RoofImage));
                                     area.SetTile(x + ((w - 1) / 2), y, floor);
                                 }
                                 else
@@ -370,6 +387,7 @@ namespace RandomGameTest
                                     GeneratePath(Direction.WEST, Direction.SOUTH, x, y, area, game);
                                     area.FillRect(walls, x - (w / 2), y - (h / 2), w, h);
                                     area.FillRect(floor, x - (w / 2) + 1, y - (h / 2) + 1, w - 2, h - 2);
+                                    area.roofAreas.Add(new RoofArea(x - (w / 2), y - (h / 2), w, h, Game.RoofImage));
                                     area.SetTile(x - (w / 2), y, floor);
                                 }
                                 else

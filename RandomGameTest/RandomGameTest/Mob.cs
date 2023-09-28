@@ -18,7 +18,7 @@ namespace RandomGameTest
             this.area = area;
             this.area.mobs.Add(this);
         }
-        public bool TryMove(int newx, int newy)
+        public virtual bool TryMove(int newx, int newy)
         {
             if (area.IsTileEmpty(newx, newy))
             {
@@ -31,7 +31,7 @@ namespace RandomGameTest
                 return false;
             }
         }
-        public void ChangeArea(int newx, int newy, Area newarea)
+        public virtual void ChangeArea(int newx, int newy, Area newarea)
         {
             x = newx;
             y = newy;

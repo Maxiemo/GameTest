@@ -9,6 +9,7 @@ namespace RandomGameTest
 {
     public class Game
     {
+        public static Image RoofImage = Image.FromFile("sprites/tiles/straw.png");
         public Form1 MainForm;
         public Panel MainScreen;
         public Graphics MainScreenGraphics;
@@ -40,13 +41,19 @@ namespace RandomGameTest
         {
             return (int)random.NextInt64(min, max);
         }
-
+        public void ChangeArea(Area newarea)
+        {
+            CurrentArea = newarea;
+            Refresh();
+        }
         public void OnGameStart()
         {
             random = new Random();
             MainScreen = MainForm.p_mainscreen;
             MainScreenGraphics = MainScreen.CreateGraphics();
-            CurrentArea = Generator_VILLAGE.Instance.Generate("Starting Area", 50, 50,TileDef.GRASS,TileDef.DIRT,new DirectionList(N:true, E:true, S:true, W: true),8,this);
+            CurrentArea = Generator_VILLAGE.Instance.Generate("Starting Area", 50, 80,TileDef.GRASS,TileDef.DIRT,new DirectionList(N:true),8,this);
+            Area area2 = Generator_PATH.Instance.Generate("Second Area", 20, 50, TileDef.GRASS, TileDef.DIRT, new DirectionList(S: true,N:true), this);
+            CurrentArea.AddConnection(Direction.NORTH, area2);
             player = new Player("Test Player", 20, 20, CurrentArea);
 
             player.game = this;
@@ -103,7 +110,20 @@ namespace RandomGameTest
             {
                 if (mob != null)
                 {
-                    g.DrawImage(mob.GetImage(), new Rectangle((mob.x * 32)-centerx + offx, mob.y * 32 - centery+offy, 32, 32));
+                    g.DrawImage(mob.GetImage(), new Rectangle((mob.x * 32) - centerx + offx, mob.y * 32 - centery + offy, 32, 32));
+                }
+            }
+            foreach (RoofArea ra in CurrentArea.roofAreas)
+            {
+                if (player.x < ra.x || player.y < ra.y || player.x >= ra.x+ra.w || player.y >= ra.y+ra.h) {
+                    for (int iy = ra.y; iy < ra.y + ra.h; iy++)
+                    {
+                        for (int ix = ra.x; ix < ra.x + ra.w; ix++)
+                        {
+                            g.DrawImage(ra.image, new Rectangle((ix * 32) - centerx + offx, iy * 32 - centery + offy, 33, 33));
+
+                        }
+                    }
                 }
             }
             panelg.DrawImage(b, 0, 0);

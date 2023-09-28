@@ -44,5 +44,41 @@ namespace RandomGameTest
         {
 
         }
+        public override void ChangeArea(int newx, int newy, Area newarea)
+        {
+            base.ChangeArea(newx, newy, newarea);
+            game.ChangeArea(newarea);
+        }
+        public override bool TryMove(int newx, int newy)
+        {
+            if (area.IsTileEmpty(newx, newy))
+            {
+                x = newx;
+                y = newy;
+                return true;
+            }
+            else
+            {
+                if(newy < 0 && area.Connections.ContainsKey(Direction.NORTH))
+                {
+                    Area newarea = area.Connections[Direction.NORTH];
+                    if (newarea.IsTileEmpty(x - (area.width / 2) + (newarea.width / 2), newarea.height - 1))
+                    {
+                        ChangeArea(x - (area.width / 2) + (newarea.width / 2), newarea.height - 1, newarea);
+                        return true;
+                    }
+                }
+                if (newy >= area.height && area.Connections.ContainsKey(Direction.SOUTH))
+                {
+                    Area newarea = area.Connections[Direction.SOUTH];
+                    if (newarea.IsTileEmpty(x - (area.width / 2) + (newarea.width / 2), 0))
+                    {
+                        ChangeArea(x - (area.width / 2) + (newarea.width / 2), 0, newarea);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
     }
 }
