@@ -61,7 +61,7 @@ namespace RandomGameTest
             }
             if (DL.dirs[Direction.EAST])
             {
-                area.FillRect(pathmat, (int)Math.Floor(w / 2d), (int)Math.Floor(w / 2d)-1, (int)Math.Floor(w/ 2d), 3);
+                area.FillRect(pathmat, (int)Math.Floor(w / 2d), (int)Math.Floor(h / 2d)-1, (int)Math.Floor(w/ 2d), 3);
             }
 
             return area;
