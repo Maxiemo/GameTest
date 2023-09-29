@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,14 @@ namespace RandomGameTest
         {
             return img;
         }
-
+        public void Pickup(ItemDrop d)
+        {
+            ItemData data = new ItemData(d.item);
+            d.Destroy();
+            game.lv_inv.Items.Add(data);
+            game.Log("You pick up the " + d.item.name);
+            game.Refresh();
+        }
         public void TryDamage(int power)
         {
             HP = Math.Max(0, HP - power);
@@ -48,13 +56,18 @@ namespace RandomGameTest
         {
             base.ChangeArea(newx, newy, newarea);
             game.ChangeArea(newarea);
+            //Debug.WriteLine("Now in: " + x + "," + y + " in area " + area.name);
+            game.Refresh();
         }
         public override bool TryMove(int newx, int newy)
         {
+            //Debug.WriteLine("Trying to move to: " + newx + "," + newy);
             if (area.IsTileEmpty(newx, newy))
             {
+                
                 x = newx;
                 y = newy;
+                area.GetTile(newx, newy).OnMobEnter(this);
                 return true;
             }
             else

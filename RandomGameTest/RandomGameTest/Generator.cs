@@ -82,9 +82,14 @@ namespace RandomGameTest
             int made = 0;
             while(attempts < 100 && made < 8)
             {
-                bool a = GenerateHouse(TileDef.WOOD, TileDef.WOOD_WALL, DL, area, game);
+                Rectangle rect;
+                bool a = GenerateHouse(TileDef.WOOD, TileDef.WOOD_WALL, DL, area, game, out rect);
                 if (a)
                 {
+                    if(made == 0)
+                    {
+                        area.MakeStairs(rect.X,rect.Y,new Area("Test Basement",7,7,game).FillRect(TileDef.WOOD_WALL,0,0,7,7).FillRect(TileDef.STONE,1,1,5,5),3,3);
+                    }
                     made++;
                 }
                 else
@@ -157,7 +162,7 @@ namespace RandomGameTest
                 }
             }
         }
-        public bool GenerateHouse(TileDef floor, TileDef walls, DirectionList DL, Area area, Game game)
+        public bool GenerateHouse(TileDef floor, TileDef walls, DirectionList DL, Area area, Game game,out Rectangle dims)
         {
             int w = -1;
             int h = -1;
@@ -222,12 +227,13 @@ namespace RandomGameTest
                     }
                     if (foundspace)
                     {
-                        Debug.WriteLine("Built house: (" + x + "," + y + "," + w + "," + h + ")");
+                        //Debug.WriteLine("Built house: (" + x + "," + y + "," + w + "," + h + ")");
                     }
                     else
                     {
-                        Debug.WriteLine("Failed to build a house.");
+                        //Debug.WriteLine("Failed to build a house.");
                     }
+                    dims = new Rectangle(x, y, w, h);
                     return foundspace;
                 case Direction.EAST:
                     while (!foundspace && attempts < 25)
@@ -282,12 +288,13 @@ namespace RandomGameTest
                     }
                     if (foundspace)
                     {
-                        Debug.WriteLine("Built house: (" + x + "," + y + "," + w + "," + h + ")");
+                        //Debug.WriteLine("Built house: (" + x + "," + y + "," + w + "," + h + ")");
                     }
                     else
                     {
-                        Debug.WriteLine("Failed to build a house.");
+                        //Debug.WriteLine("Failed to build a house.");
                     }
+                    dims = new Rectangle(x, y, w, h);
                     return foundspace;
                 case Direction.WEST:
                     while (!foundspace && attempts < 25)
@@ -342,12 +349,13 @@ namespace RandomGameTest
                     }
                     if (foundspace)
                     {
-                        Debug.WriteLine("Built house: (" + x + "," + y + "," + w + "," + h + ")");
+                        //Debug.WriteLine("Built house: (" + x + "," + y + "," + w + "," + h + ")");
                     }
                     else
                     {
-                        Debug.WriteLine("Failed to build a house.");
+                        //Debug.WriteLine("Failed to build a house.");
                     }
+                    dims = new Rectangle(x, y, w, h);
                     return foundspace;
                 case Direction.SOUTH:
 
@@ -403,14 +411,16 @@ namespace RandomGameTest
                     }
                     if (foundspace)
                     {
-                        Debug.WriteLine("Built house: (" + x + "," + y + "," + w + "," + h + ")");
+                        //Debug.WriteLine("Built house: (" + x + "," + y + "," + w + "," + h + ")");
                     }
                     else
                     {
-                        Debug.WriteLine("Failed to build a house.");
+                        //Debug.WriteLine("Failed to build a house.");
                     }
+                    dims = new Rectangle(x, y, w, h);
                     return foundspace;
                 default:
+                    dims = new Rectangle(0, 0, 0, 0);
                     return false;
             }
         }

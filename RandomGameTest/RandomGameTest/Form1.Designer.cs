@@ -41,7 +41,7 @@
             labHealth = new Label();
             label3 = new Label();
             button1 = new Button();
-            textBox1 = new TextBox();
+            tb_logbox = new TextBox();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -190,16 +190,17 @@
             button1.Text = "button1";
             button1.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // tb_logbox
             // 
-            textBox1.BackColor = Color.White;
-            textBox1.BorderStyle = BorderStyle.FixedSingle;
-            textBox1.Location = new Point(24, 708);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.ReadOnly = true;
-            textBox1.Size = new Size(538, 261);
-            textBox1.TabIndex = 12;
+            tb_logbox.BackColor = Color.White;
+            tb_logbox.BorderStyle = BorderStyle.FixedSingle;
+            tb_logbox.Location = new Point(24, 708);
+            tb_logbox.Multiline = true;
+            tb_logbox.Name = "tb_logbox";
+            tb_logbox.ReadOnly = true;
+            tb_logbox.ScrollBars = ScrollBars.Vertical;
+            tb_logbox.Size = new Size(538, 261);
+            tb_logbox.TabIndex = 12;
             // 
             // Form1
             // 
@@ -208,7 +209,7 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(1029, 987);
-            Controls.Add(textBox1);
+            Controls.Add(tb_logbox);
             Controls.Add(button1);
             Controls.Add(label3);
             Controls.Add(labHealth);
@@ -252,6 +253,6 @@
         private Label labHealth;
         private Label label3;
         private Button button1;
-        private TextBox textBox1;
+        public TextBox tb_logbox;
     }
 }

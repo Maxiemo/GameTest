@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace RandomGameTest
             {
                 x = newx;
                 y = newy;
+                area.GetTile(newx, newy).OnMobEnter(this);
                 return true;
             }
             else
@@ -33,6 +35,7 @@ namespace RandomGameTest
         }
         public virtual void ChangeArea(int newx, int newy, Area newarea)
         {
+            //Debug.WriteLine("Moving mob to: " + newx + ", " + newy);
             x = newx;
             y = newy;
             area.mobs.Remove(this);

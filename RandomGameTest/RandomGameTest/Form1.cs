@@ -86,6 +86,7 @@ namespace RandomGameTest
                 dropdata.drop.Destroy();
                 dropdata.Remove();
                 lv_inventory.Items.Add(data);
+                CurrentGame.Log("You pick up the " + dropdata.item.name);
                 CurrentGame.Refresh();
             }
         }
@@ -105,6 +106,7 @@ namespace RandomGameTest
                 ItemData data = (ItemData)e.Data.GetData(typeof(ItemData));
                 ItemDrop drop = new ItemDrop(data.item, CurrentGame.player.x, CurrentGame.player.y, CurrentGame.player.area);
                 data.Remove();
+                CurrentGame.Log("You drop the " + data.item.name);
                 CurrentGame.Refresh();
             }
         }
@@ -116,6 +118,7 @@ namespace RandomGameTest
                 ItemData data = (ItemData)e.Data.GetData(typeof(ItemData));
                 ItemDrop drop = new ItemDrop(data.item, CurrentGame.player.x, CurrentGame.player.y, CurrentGame.player.area);
                 data.Remove();
+                CurrentGame.Log("You drop the " + data.item.name);
                 CurrentGame.Refresh();
             }
         }

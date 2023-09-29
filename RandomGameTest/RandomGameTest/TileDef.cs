@@ -22,7 +22,11 @@ namespace RandomGameTest
         public static TileDef GRASS = new TileDef("Grass", Image.FromFile("sprites/tiles/grass.png"));
         public static TileDef DIRT = new TileDef("Dirt", Image.FromFile("sprites/tiles/dirt.png"));
         public static TileDef WOOD = new TileDef("Wood", Image.FromFile("sprites/tiles/wood.png"));
-        public static TileDef WOOD_WALL = new TileDef("WoodWall", Image.FromFile("sprites/tiles/woodwall.png"),true);
+        public static TileDef WOOD_WALL = new TileDef("Wood Wall", Image.FromFile("sprites/tiles/woodwall.png"),true);
         public static TileDef PATH_PLACEHOLDER = new TileDef("ERROR PATH PLACEHOLDER",Image.FromFile("sprites/tiles/placeholder.png"),true);
+        public static TileDef DOWN_STAIRS = new TileDef("Down Stairs", Image.FromFile("sprites/tiles/downstairs.png"),false);
+        public static TileDef UP_STAIRS = new TileDef("Up Stairs", Image.FromFile("sprites/tiles/upstairs.png"), false);
+        public static TileDef STONE = new TileDef("Stone", Image.FromFile("sprites/tiles/stone.png"), false);
+
     }
 }

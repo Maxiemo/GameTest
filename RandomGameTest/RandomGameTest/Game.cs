@@ -9,10 +9,12 @@ namespace RandomGameTest
 {
     public class Game
     {
+        public Keyboard keyboard = new Keyboard();
         public static Image RoofImage = Image.FromFile("sprites/tiles/straw.png");
         public Form1 MainForm;
         public Panel MainScreen;
         public Graphics MainScreenGraphics;
+        public TextBox LogBox;
         public Area CurrentArea;
         public ListView lv_inv;
         public ListView lv_floorinv;
@@ -46,12 +48,25 @@ namespace RandomGameTest
             CurrentArea = newarea;
             Refresh();
         }
+        public void Log(string s)
+        {
+            LogBox.AppendText(s+"\n");
+            string[] lines = LogBox.Lines;
+            while(lines.Length > 25)
+            {
+                lines = lines.Skip(1).ToArray();
+            }
+            LogBox.Lines = lines;
+            LogBox.SelectionStart = LogBox.Text.Length-1;
+            LogBox.ScrollToCaret();
+        }
         public void OnGameStart()
         {
             random = new Random();
             MainScreen = MainForm.p_mainscreen;
             MainScreenGraphics = MainScreen.CreateGraphics();
-            CurrentArea = Generator_VILLAGE.Instance.Generate("Starting Area", 50, 60,TileDef.GRASS,TileDef.DIRT,new DirectionList(E:true,S:true,N:true),8,this);
+            LogBox = MainForm.tb_logbox;
+            CurrentArea = Generator_VILLAGE.Instance.Generate("Starting Area", 40, 40,TileDef.GRASS,TileDef.DIRT,new DirectionList(N:true),8,this);
             Area area2 = Generator_PATH.Instance.Generate("Second Area", 30, 50, TileDef.GRASS, TileDef.DIRT, new DirectionList(S: true,N:true,W:true), this);
             CurrentArea.AddConnection(Direction.EAST, area2);
             player = new Player("Test Player", 20, 20, CurrentArea);
@@ -164,6 +179,7 @@ namespace RandomGameTest
         {
             switch (e)
             {
+                case Keys.E:
                 case Keys.NumPad9:
                     player.TryMove(player.x + 1, player.y - 1);
                     Refresh();
@@ -172,6 +188,7 @@ namespace RandomGameTest
                     player.TryMove(player.x, player.y - 1);
                     Refresh();
                     break;
+                case Keys.Q:
                 case Keys.NumPad7:
                     player.TryMove(player.x - 1, player.y - 1);
                     Refresh();
@@ -184,6 +201,7 @@ namespace RandomGameTest
                     player.TryMove(player.x - 1, player.y);
                     Refresh();
                     break;
+                case Keys.C:
                 case Keys.NumPad3:
                     player.TryMove(player.x + 1, player.y + 1);
                     Refresh();
@@ -192,6 +210,7 @@ namespace RandomGameTest
                     player.TryMove(player.x, player.y + 1);
                     Refresh();
                     break;
+                case Keys.Z:
                 case Keys.NumPad1:
                     player.TryMove(player.x - 1, player.y + 1);
                     Refresh();
@@ -227,6 +246,21 @@ namespace RandomGameTest
                 case Keys.D:
                     player.TryMove(player.x + 1, player.y);
                     Refresh();
+                    break;
+                case Keys.G:
+                    foreach(ItemDrop d in CurrentArea.items)
+                    {
+                        if(d.x == player.x && d.y == player.y)
+                        {
+                            player.Pickup(d);
+                            break;
+                        }
+                    }
+
+
+                    break;
+                case Keys.Space:
+                        CurrentArea.GetTile(player.x, player.y).OnInteract(player);
                     break;
                 default:
 

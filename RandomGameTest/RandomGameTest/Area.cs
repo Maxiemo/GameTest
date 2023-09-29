@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,6 +45,11 @@ namespace RandomGameTest
                 }
             }
             game.Areas.Add(name, this);
+        }
+        public void MakeStairs(int x, int y, Area target, int tx, int ty)
+        {
+            tiles[x, y] = new TransTile(x, y, TileDef.DOWN_STAIRS, this, target, tx, ty);
+            target.tiles[tx, ty] = new TransTile(tx, ty, TileDef.UP_STAIRS, target, this, x, y);
         }
         public Area FillRect(TileDef def, int x, int y, int w, int h)
         {
@@ -123,8 +129,32 @@ namespace RandomGameTest
         {
             return def.image;
         }
-    }
+        public virtual void OnMobEnter(Mob mob)
+        {
+            //Debug.WriteLine("Entered tile: " + x + ", " + y);
+        }
 
+        public virtual void OnInteract(Mob mob)
+        {
+            
+        }
+    }
+    public class TransTile : Tile
+    {
+        public int tx;
+        public int ty;
+        public Area targetarea;
+        public TransTile(int x, int y, TileDef def, Area area, Area targetarea, int tx, int ty) : base(x, y, def, area)
+        {
+            this.tx = tx;
+            this.ty = ty;
+            this.targetarea = targetarea;
+        }
+        public override void OnInteract(Mob mob)
+        {
+            mob.ChangeArea(tx, ty, targetarea);
+        }
+    }
     public struct RoofArea
     {
         public Image image;
