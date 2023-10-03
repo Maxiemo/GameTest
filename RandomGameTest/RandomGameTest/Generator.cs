@@ -72,6 +72,106 @@ namespace RandomGameTest
             return Generate(name, w, h, TileDef.GRASS,TileDef.DIRT,new DirectionList(), game);
         }
     }
+    public class Generator_DUNGEON : Generator
+    {
+        public static Generator_DUNGEON Instance = new Generator_DUNGEON();
+
+        public struct Room
+        {
+            public int x, y, w, h;
+            public Room(int x, int y, int w, int h)
+            {
+                this.x = x;
+                this.y = y;
+                this.w = w;
+                this.h = h;
+
+            }
+            public double GetDistance(Room room)
+            {
+                double ix = Math.Abs(room.x - x);
+                double iy = Math.Abs(room.y - y);
+                return Math.Sqrt((ix * ix) + (iy * iy));
+                }
+        }
+        public Area Generate(string name, int w, int h, int rooms, TileDef wallmat, TileDef floormat, Game game, out Room StartRoom,int depth = 1, int desdepth = 1)
+        {
+            Area area = new Area(name, w, h, game);
+            List<Room> Unconnected = new List<Room>();
+            List<Room> Connected = new List<Room>();
+            int fails = 0;
+            int made = 0;
+            area.FillRect(TileDef.PH_EMPTY, 0, 0, w, h);
+            while(fails < rooms*10 && made < rooms)
+            {
+                int iw = game.RandInt(5, 10);
+                int ih = game.RandInt(5, 10);
+                int ix = game.RandInt(1 + (iw / 2), w - 2 - (iw / 2));
+                int iy = game.RandInt(1 + (ih / 2), h - 2 - (ih / 2));
+                if (area.IsRectEmpty(ix - (iw / 2), iy - (ih / 2), iw, ih)){
+                    area.FillRect(TileDef.PH_ROOMWALL, ix - (iw / 2), iy - (ih / 2), iw, ih);
+                    area.FillRect(TileDef.PH_ROOMINSIDE, ix +1 - (iw / 2), iy +1- (ih / 2), iw-2, ih-2);
+                    Unconnected.Add(new Room(ix,iy,iw,ih));
+                }
+                else
+                {
+                    fails++;
+                }
+            }
+            
+            StartRoom = Unconnected[0];
+            Unconnected.Remove(StartRoom);
+            Connected.Add(StartRoom);
+            foreach(Room r in Unconnected)
+            {
+                Room nearroom = Connected[0];
+                double min = 999;
+                foreach (Room nr in Connected)
+                {
+                    double newmin = nr.GetDistance(r);
+                    if(newmin < min)
+                    {
+                        min = newmin;
+                        nearroom = nr;
+                    }
+                }
+                int ix = r.x;
+                int iy = r.y;
+                while(ix != nearroom.x)
+                {
+                    if (ix > nearroom.x) ix--;
+                    if (ix < nearroom.x) ix++;
+                    area.SetTile(ix, iy, TileDef.PATH_PLACEHOLDER);
+                }
+
+                while (iy != nearroom.y)
+                {
+                    if (iy > nearroom.y) iy--;
+                    if (iy < nearroom.y) iy++;
+                    area.SetTile(ix, iy, TileDef.PATH_PLACEHOLDER);
+                }
+                Connected.Add(r);
+            }
+
+            area.ReplaceInRect(TileDef.PATH_PLACEHOLDER, floormat, 0, 0, w, h);
+            area.ReplaceInRect(TileDef.PH_ROOMINSIDE, floormat, 0, 0, w, h);
+            area.ReplaceInRect(TileDef.PH_ROOMWALL, wallmat, 0, 0, w, h);
+            area.ReplaceInRect(TileDef.PH_EMPTY, wallmat, 0, 0, w, h);
+            if(depth < desdepth)
+            {
+                Room exit = Connected[Connected.Count - 1];
+                Room sr;
+                Area next = Generator_DUNGEON.Instance.Generate(name + " F" + (depth + 1), w, h, rooms, wallmat, floormat, game, out sr, depth + 1, desdepth);
+                area.MakeStairs(exit.x, exit.y, next, sr.x, sr.y);
+            }
+
+            return area;
+        }
+        public Area Generate(string name, int w, int h, Game game)
+        {
+            throw new NotImplementedException();
+        }
+    }
     public class Generator_VILLAGE : Generator
     {
         public static Generator_VILLAGE Instance = new Generator_VILLAGE();
@@ -88,7 +188,9 @@ namespace RandomGameTest
                 {
                     if(made == 0)
                     {
-                        area.MakeStairs(rect.X,rect.Y,new Area("Test Basement",7,7,game).FillRect(TileDef.WOOD_WALL,0,0,7,7).FillRect(TileDef.STONE,1,1,5,5),3,3);
+                        Generator_DUNGEON.Room StartRoom;
+                        Area dungeonarea = Generator_DUNGEON.Instance.Generate(area.name + " Dungeon", 30, 30, 5, TileDef.STONE_WALL, TileDef.STONE, game, out StartRoom,1,3);
+                        area.MakeStairs(rect.X,rect.Y,dungeonarea,StartRoom.x,StartRoom.y);
                     }
                     made++;
                 }

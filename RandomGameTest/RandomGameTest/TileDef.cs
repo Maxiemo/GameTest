@@ -27,6 +27,10 @@ namespace RandomGameTest
         public static TileDef DOWN_STAIRS = new TileDef("Down Stairs", Image.FromFile("sprites/tiles/downstairs.png"),false);
         public static TileDef UP_STAIRS = new TileDef("Up Stairs", Image.FromFile("sprites/tiles/upstairs.png"), false);
         public static TileDef STONE = new TileDef("Stone", Image.FromFile("sprites/tiles/stone.png"), false);
+        public static TileDef STONE_WALL = new TileDef("Stone", Image.FromFile("sprites/tiles/stonewall.png"), true);
+        public static TileDef PH_ROOMWALL = new TileDef("ROOM WALL PLACEHOLDER", Image.FromFile("sprites/tiles/placeholder.png"), true);
+        public static TileDef PH_ROOMINSIDE = new TileDef("ROOM FLOOR PLACEHOLDER", Image.FromFile("sprites/tiles/placeholder.png"), true);
+        public static TileDef PH_EMPTY = new TileDef("EMPTY PLACEHOLDER", Image.FromFile("sprites/tiles/placeholder.png"), false);
 
     }
 }
