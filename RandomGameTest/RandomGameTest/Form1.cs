@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace RandomGameTest
 {
     public partial class Form1 : Form
@@ -6,6 +8,12 @@ namespace RandomGameTest
         public Form1()
         {
             InitializeComponent();
+            typeof(Panel).InvokeMember("DoubleBuffered",
+    BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
+    null, p_minimap, new object[] { true });
+            typeof(Panel).InvokeMember("DoubleBuffered",
+    BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
+    null, p_mainscreen, new object[] { true });
         }
 
         private void lv_inventory_SelectedIndexChanged(object sender, EventArgs e)
