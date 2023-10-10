@@ -42,6 +42,7 @@
             label3 = new Label();
             button1 = new Button();
             tb_logbox = new TextBox();
+            p_minimap = new Panel();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -73,12 +74,12 @@
             // lv_inventory
             // 
             lv_inventory.AllowDrop = true;
-            lv_inventory.Location = new Point(587, 179);
+            lv_inventory.Location = new Point(587, 314);
             lv_inventory.Margin = new Padding(3, 4, 3, 4);
             lv_inventory.MultiSelect = false;
             lv_inventory.Name = "lv_inventory";
             lv_inventory.ShowItemToolTips = true;
-            lv_inventory.Size = new Size(356, 496);
+            lv_inventory.Size = new Size(356, 361);
             lv_inventory.TabIndex = 2;
             lv_inventory.TileSize = new Size(64, 64);
             lv_inventory.UseCompatibleStateImageBehavior = false;
@@ -123,7 +124,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(746, 155);
+            label1.Location = new Point(723, 290);
             label1.Name = "label1";
             label1.Size = new Size(70, 20);
             label1.TabIndex = 5;
@@ -145,7 +146,7 @@
             pb_health.Location = new Point(635, 67);
             pb_health.Margin = new Padding(3, 4, 3, 4);
             pb_health.Name = "pb_health";
-            pb_health.Size = new Size(379, 31);
+            pb_health.Size = new Size(207, 31);
             pb_health.Style = ProgressBarStyle.Continuous;
             pb_health.TabIndex = 7;
             pb_health.Value = 50;
@@ -156,7 +157,7 @@
             pb_mana.Location = new Point(635, 117);
             pb_mana.Margin = new Padding(3, 4, 3, 4);
             pb_mana.Name = "pb_mana";
-            pb_mana.Size = new Size(379, 31);
+            pb_mana.Size = new Size(207, 31);
             pb_mana.Style = ProgressBarStyle.Continuous;
             pb_mana.TabIndex = 8;
             pb_mana.Value = 50;
@@ -182,7 +183,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(951, 179);
+            button1.Location = new Point(965, 314);
             button1.Margin = new Padding(3, 4, 3, 4);
             button1.Name = "button1";
             button1.Size = new Size(64, 81);
@@ -202,6 +203,14 @@
             tb_logbox.Size = new Size(538, 261);
             tb_logbox.TabIndex = 12;
             // 
+            // p_minimap
+            // 
+            p_minimap.Location = new Point(858, 51);
+            p_minimap.Name = "p_minimap";
+            p_minimap.Size = new Size(195, 195);
+            p_minimap.TabIndex = 13;
+            p_minimap.Paint += p_minimap_Paint;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -209,6 +218,7 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(1029, 987);
+            Controls.Add(p_minimap);
             Controls.Add(tb_logbox);
             Controls.Add(button1);
             Controls.Add(label3);
@@ -254,5 +264,6 @@
         private Label label3;
         private Button button1;
         public TextBox tb_logbox;
+        public Panel p_minimap;
     }
 }

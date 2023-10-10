@@ -146,6 +146,14 @@ namespace RandomGameTest
 
         }
 
+        private void p_minimap_Paint(object sender, PaintEventArgs e)
+        {
+            if (CurrentGame != null)
+            {
+                CurrentGame.RedrawMinimap(e.Graphics);
+            }
+        }
+
         protected override CreateParams CreateParams
         {
             get

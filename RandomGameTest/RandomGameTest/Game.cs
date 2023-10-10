@@ -14,6 +14,7 @@ namespace RandomGameTest
         public Form1 MainForm;
         public Panel MainScreen;
         public Graphics MainScreenGraphics;
+        public Panel Minimap;
         public TextBox LogBox;
         public Area CurrentArea;
         public ListView lv_inv;
@@ -65,6 +66,10 @@ namespace RandomGameTest
             random = new Random();
             MainScreen = MainForm.p_mainscreen;
             MainScreenGraphics = MainScreen.CreateGraphics();
+            //MainForm.p_minimap.BackgroundImage = new Bitmap(100, 100);
+            Minimap = MainForm.p_minimap;
+            Minimap.Size = new Size(100, 100);
+            Minimap.BackgroundImage = new Bitmap(100, 100);
             LogBox = MainForm.tb_logbox;
             CurrentArea = Generator_VILLAGE.Instance.Generate("Starting Area", 40, 40,TileDef.GRASS,TileDef.DIRT,new DirectionList(N:true),8,this);
             Area area2 = Generator_PATH.Instance.Generate("Second Area", 30, 50, TileDef.GRASS, TileDef.DIRT, new DirectionList(S: true,N:true,W:true), this);
@@ -92,8 +97,39 @@ namespace RandomGameTest
             MainScreen.Refresh();
             RedrawFloorItems();
             RedrawInv();
+            MainForm.p_minimap.Refresh();
             pb_mana.Value = (int)Math.Ceiling((double)(player.MP / player.MaxMP) * 100);
             pb_health.Value = (int)Math.Ceiling((double)(player.HP / player.MaxHP) * 100);
+        }
+        public void RedrawMinimap(Graphics g)
+        {
+            g.Clear(Color.Black);
+            int px = 0;
+            int py = 0;
+            for(int iy = player.y - 50; iy < player.y + 50; iy++)
+            {
+                py = iy - player.y + 50;
+                for (int ix = player.x - 50; ix < player.x + 50; ix++)
+                {
+                    px = ix - player.x + 50;
+                    if(ix >= 0 && ix < CurrentArea.width && iy >= 0 && iy < CurrentArea.height)
+                    {
+                        Brush col = Brushes.Black;
+                        Tile tile = CurrentArea.GetTile(ix, iy);
+                        if (tile.def.solid) col = Brushes.White;
+                        if (tile.GetType() == typeof(TransTile))
+                        {
+                            g.FillRectangle(Brushes.Orange, px-1, py-1, 2, 2);
+                        }
+                        else
+                        {
+                            g.FillRectangle(col, px, py, 1, 1);
+                        }
+                        
+                    }
+                }
+            }
+            g.FillRectangle(Brushes.Yellow, 49, 49, 2, 2);
         }
         public void DrawScreen(Graphics panelg)
         {
